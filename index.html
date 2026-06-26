@@ -349,15 +349,6 @@
       margin-bottom:10px;
     }
     .modal-head h2{margin:0}
-    .floating{
-      position:fixed;
-      right:16px;
-      bottom:16px;
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-      z-index:30;
-    }
     .toast{
       position:fixed;
       left:50%;
@@ -379,6 +370,87 @@
       transform:translateX(-50%) translateY(0);
     }
     .mobile-only{display:none}
+
+    /* Tela de login */
+    body.locked{
+      background:#111827;
+    }
+    body.locked header,
+    body.locked main{
+      display:none;
+    }
+    .login-screen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:22px;
+      background:
+        radial-gradient(circle at top left, rgba(37,99,235,.35), transparent 35%),
+        linear-gradient(135deg,#111827,#030712);
+    }
+    body:not(.locked) .login-screen{
+      display:none;
+    }
+    .login-card{
+      width:100%;
+      max-width:430px;
+      background:#ffffff;
+      border-radius:26px;
+      box-shadow:0 30px 90px rgba(0,0,0,.35);
+      padding:24px;
+      border:1px solid rgba(255,255,255,.25);
+    }
+    .login-logo{
+      width:70px;
+      height:70px;
+      border-radius:22px;
+      background:#111827;
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:34px;
+      margin-bottom:16px;
+    }
+    .login-card h1{
+      margin:0;
+      font-size:26px;
+      color:#111827;
+    }
+    .login-card p{
+      color:#6b7280;
+      line-height:1.45;
+      margin:8px 0 18px;
+    }
+    .login-help{
+      background:#f9fafb;
+      border:1px solid #e5e7eb;
+      border-radius:16px;
+      padding:12px;
+      font-size:13px;
+      color:#4b5563;
+      margin-top:12px;
+      line-height:1.4;
+    }
+    .login-error{
+      display:none;
+      background:#fef2f2;
+      color:#b91c1c;
+      border:1px solid #fecaca;
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:700;
+      font-size:14px;
+      margin-bottom:10px;
+    }
+    .login-error.show{
+      display:block;
+    }
+    .logout-btn{
+      background:#991b1b!important;
+    }
+
     @media(max-width:800px){
       header{padding:17px 13px 20px}
       .header-wrap{display:block}
@@ -403,18 +475,54 @@
       }
       .mobile-only{display:inline-flex}
       .desktop-only{display:none}
-      .floating{right:10px;bottom:10px}
-      .floating button{box-shadow:0 10px 25px rgba(17,24,39,.2)}
     }
     @media print{
-      header,nav,.filters,.actions,.floating,.modal-backdrop{display:none!important}
+      header,nav,.filters,.actions,.modal-backdrop{display:none!important}
       main{margin:0;max-width:100%;padding:0}
       .card{box-shadow:none;border:1px solid #999;break-inside:avoid}
       body{background:#fff}
     }
   </style>
 </head>
-<body>
+<body class="locked">
+
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="login-logo">📚</div>
+      <h1>Agenda Docente</h1>
+      <p id="loginSubtitle">Acesse sua agenda pessoal de aulas e atividades.</p>
+
+      <div id="loginError" class="login-error"></div>
+
+      <form id="setupForm" onsubmit="createLocalAccount(event)" style="display:none">
+        <label>Nome do professor
+          <input id="setupName" autocomplete="name" placeholder="Ex.: Ricardo" required />
+        </label>
+        <label>Senha de acesso
+          <input id="setupPassword" type="password" autocomplete="new-password" placeholder="Crie uma senha" required minlength="4" />
+        </label>
+        <label>Confirmar senha
+          <input id="setupPasswordConfirm" type="password" autocomplete="new-password" placeholder="Repita a senha" required minlength="4" />
+        </label>
+        <button type="submit" style="width:100%;margin-top:6px">Criar acesso</button>
+      </form>
+
+      <form id="loginForm" onsubmit="loginLocal(event)" style="display:none">
+        <label>Professor
+          <input id="loginName" autocomplete="username" placeholder="Nome cadastrado" required />
+        </label>
+        <label>Senha
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Digite sua senha" required />
+        </label>
+        <button type="submit" style="width:100%;margin-top:6px">Entrar</button>
+      </form>
+
+      <div class="login-help">
+        Primeiro acesso: crie um nome e uma senha. Os dados ficam salvos apenas neste aparelho/navegador.
+      </div>
+    </div>
+  </section>
+
   <header>
     <div class="header-wrap">
       <div class="brand">
@@ -426,6 +534,7 @@
         <button class="light" onclick="openTaskModal()">+ Atividade</button>
         <button class="secondary" onclick="showTab('relatorios')">Relatórios</button>
         <button id="installBtn" class="success" style="display:none" onclick="installPWA()">Instalar app</button>
+        <button class="logout-btn" onclick="logoutLocal()">Sair</button>
       </div>
     </div>
   </header>
@@ -689,13 +798,7 @@
       </div>
     </section>
   </main>
-
-  <div class="floating">
-    <button onclick="openLessonModal()">+ Aula</button>
-    <button class="light" onclick="openTaskModal()">+ Atividade</button>
-  </div>
-
-  <div id="lessonModal" class="modal-backdrop">
+<div id="lessonModal" class="modal-backdrop">
     <div class="modal">
       <div class="modal-head">
         <h2 id="lessonModalTitle">Cadastrar aula</h2>
@@ -1605,6 +1708,144 @@ document.getElementById("lessonModal").addEventListener("click", e => {
 document.getElementById("taskModal").addEventListener("click", e => {
   if(e.target.id === "taskModal") closeTaskModal();
 });
+
+
+// Login local do professor
+const LOGIN_KEY = "agenda_docente_login_v1";
+const SESSION_KEY = "agenda_docente_session_v1";
+
+async function sha256(text){
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+  const hash = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+}
+
+function getLocalAccount(){
+  try{
+    return JSON.parse(localStorage.getItem(LOGIN_KEY));
+  }catch(e){
+    return null;
+  }
+}
+
+function showLoginError(message){
+  const el = document.getElementById("loginError");
+  if(!el) return;
+  el.textContent = message;
+  el.classList.add("show");
+}
+
+function clearLoginError(){
+  const el = document.getElementById("loginError");
+  if(!el) return;
+  el.textContent = "";
+  el.classList.remove("show");
+}
+
+function updateLoginScreen(){
+  const account = getLocalAccount();
+  const setupForm = document.getElementById("setupForm");
+  const loginForm = document.getElementById("loginForm");
+  const subtitle = document.getElementById("loginSubtitle");
+
+  if(!setupForm || !loginForm) return;
+
+  if(account && account.name){
+    setupForm.style.display = "none";
+    loginForm.style.display = "grid";
+    subtitle.textContent = "Bem-vindo de volta. Entre para acessar sua agenda.";
+    document.getElementById("loginName").value = account.name;
+  }else{
+    setupForm.style.display = "grid";
+    loginForm.style.display = "none";
+    subtitle.textContent = "Primeiro acesso: crie seu acesso de professor.";
+  }
+}
+
+async function createLocalAccount(event){
+  event.preventDefault();
+  clearLoginError();
+
+  const name = document.getElementById("setupName").value.trim();
+  const pass = document.getElementById("setupPassword").value;
+  const confirm = document.getElementById("setupPasswordConfirm").value;
+
+  if(pass.length < 4){
+    showLoginError("A senha precisa ter pelo menos 4 caracteres.");
+    return;
+  }
+
+  if(pass !== confirm){
+    showLoginError("As senhas não conferem.");
+    return;
+  }
+
+  const passwordHash = await sha256(pass);
+  localStorage.setItem(LOGIN_KEY, JSON.stringify({
+    name,
+    passwordHash,
+    createdAt: new Date().toISOString()
+  }));
+  localStorage.setItem(SESSION_KEY, "active");
+  unlockApp();
+  toast("Acesso criado com sucesso.");
+}
+
+async function loginLocal(event){
+  event.preventDefault();
+  clearLoginError();
+
+  const account = getLocalAccount();
+  if(!account){
+    updateLoginScreen();
+    return;
+  }
+
+  const name = document.getElementById("loginName").value.trim();
+  const pass = document.getElementById("loginPassword").value;
+  const passwordHash = await sha256(pass);
+
+  if(name !== account.name || passwordHash !== account.passwordHash){
+    showLoginError("Nome ou senha incorretos.");
+    return;
+  }
+
+  localStorage.setItem(SESSION_KEY, "active");
+  unlockApp();
+  toast("Login realizado.");
+}
+
+function unlockApp(){
+  document.body.classList.remove("locked");
+  const loginPassword = document.getElementById("loginPassword");
+  const setupPassword = document.getElementById("setupPassword");
+  const setupPasswordConfirm = document.getElementById("setupPasswordConfirm");
+  if(loginPassword) loginPassword.value = "";
+  if(setupPassword) setupPassword.value = "";
+  if(setupPasswordConfirm) setupPasswordConfirm.value = "";
+  renderAll();
+}
+
+function logoutLocal(){
+  localStorage.removeItem(SESSION_KEY);
+  document.body.classList.add("locked");
+  updateLoginScreen();
+  clearLoginError();
+}
+
+function initLogin(){
+  const account = getLocalAccount();
+  const session = localStorage.getItem(SESSION_KEY);
+
+  updateLoginScreen();
+
+  if(account && session === "active"){
+    document.body.classList.remove("locked");
+  }else{
+    document.body.classList.add("locked");
+  }
+}
 
 loadState();
 document.getElementById("reportDate").value = todayISO();
