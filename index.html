@@ -1,0 +1,1651 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agenda Docente</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Agenda Docente" />
+  <meta name="theme-color" content="#111827" />
+  <style>
+    :root{
+      --bg:#f3f4f6;
+      --panel:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --dark:#111827;
+      --soft:#f9fafb;
+      --accent:#2563eb;
+      --accent-dark:#1d4ed8;
+      --green:#16a34a;
+      --yellow:#ca8a04;
+      --red:#dc2626;
+      --orange:#ea580c;
+      --shadow:0 10px 25px rgba(17,24,39,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+    header{
+      background:linear-gradient(135deg,#111827,#1f2937);
+      color:#fff;
+      padding:22px 16px 26px;
+      position:sticky;
+      top:0;
+      z-index:20;
+      box-shadow:0 4px 20px rgba(0,0,0,.18);
+    }
+    .header-wrap{
+      max-width:1180px;
+      margin:0 auto;
+      display:flex;
+      gap:16px;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .brand h1{
+      margin:0;
+      font-size:24px;
+      letter-spacing:.2px;
+    }
+    .brand p{
+      margin:6px 0 0;
+      color:#d1d5db;
+      font-size:14px;
+    }
+    .quick-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    button,.btn{
+      border:0;
+      border-radius:12px;
+      padding:10px 13px;
+      cursor:pointer;
+      background:var(--accent);
+      color:#fff;
+      font-weight:700;
+      font-size:14px;
+      transition:.15s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      justify-content:center;
+      min-height:40px;
+    }
+    button:hover,.btn:hover{filter:brightness(.96); transform:translateY(-1px)}
+    button.secondary{background:#374151}
+    button.light{background:#eef2ff;color:#1e40af}
+    button.success{background:var(--green)}
+    button.warning{background:var(--orange)}
+    button.danger{background:var(--red)}
+    button.ghost{background:#fff;color:#111827;border:1px solid var(--line)}
+    button.small{padding:8px 10px;min-height:34px;font-size:13px;border-radius:10px}
+    main{
+      max-width:1180px;
+      margin:18px auto 70px;
+      padding:0 14px;
+    }
+    nav.tabs{
+      display:flex;
+      gap:8px;
+      overflow:auto;
+      padding:2px 0 12px;
+      margin-bottom:10px;
+    }
+    .tab-btn{
+      white-space:nowrap;
+      background:#fff;
+      color:#111827;
+      border:1px solid var(--line);
+      box-shadow:none;
+    }
+    .tab-btn.active{
+      background:#111827;
+      color:#fff;
+      border-color:#111827;
+    }
+    .screen{display:none}
+    .screen.active{display:block}
+    .grid{
+      display:grid;
+      gap:14px;
+    }
+    .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+    .stat{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .stat .label{
+      color:var(--muted);
+      font-size:13px;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+    .stat .value{
+      font-size:34px;
+      font-weight:800;
+      margin-top:5px;
+    }
+    .stat .icon{
+      width:42px;
+      height:42px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eef2ff;
+      font-size:20px;
+    }
+    h2{
+      margin:0 0 12px;
+      font-size:21px;
+    }
+    h3{
+      margin:0 0 10px;
+      font-size:17px;
+    }
+    .muted{color:var(--muted)}
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin:22px 0 10px;
+    }
+    form{
+      display:grid;
+      gap:10px;
+    }
+    label{
+      display:grid;
+      gap:6px;
+      font-size:13px;
+      color:#374151;
+      font-weight:700;
+    }
+    input,select,textarea{
+      width:100%;
+      border:1px solid #d1d5db;
+      border-radius:12px;
+      padding:11px 12px;
+      font-size:15px;
+      background:#fff;
+      color:#111827;
+      outline:none;
+    }
+    textarea{
+      min-height:92px;
+      resize:vertical;
+      font-family:Arial, Helvetica, sans-serif;
+    }
+    input:focus,select:focus,textarea:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(37,99,235,.12);
+    }
+    .form-row{
+      display:grid;
+      gap:10px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .form-row.three{
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .list{
+      display:grid;
+      gap:10px;
+    }
+    .item{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px;
+      background:#fff;
+    }
+    .item-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .item-title{
+      font-weight:800;
+      font-size:16px;
+      margin-bottom:5px;
+    }
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:6px;
+      margin:7px 0;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      background:#f3f4f6;
+      color:#374151;
+      border:1px solid #e5e7eb;
+      border-radius:999px;
+      padding:5px 8px;
+      font-size:12px;
+      font-weight:700;
+    }
+    .chip.status-planejada{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+    .chip.status-ministrada{background:#ecfdf5;color:#15803d;border-color:#bbf7d0}
+    .chip.status-nao-realizada{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+    .chip.status-pendente{background:#fff7ed;color:#c2410c;border-color:#fed7aa}
+    .chip.status-aplicada{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe}
+    .chip.status-corrigida{background:#ecfdf5;color:#15803d;border-color:#bbf7d0}
+    .chip.status-atrasada{background:#fef2f2;color:#b91c1c;border-color:#fecaca}
+    .item p{margin:7px 0 0;line-height:1.4}
+    .filters{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:12px;
+      display:grid;
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .empty{
+      text-align:center;
+      padding:24px 12px;
+      color:#6b7280;
+      border:1px dashed #d1d5db;
+      border-radius:16px;
+      background:#fff;
+    }
+    .table-wrap{
+      overflow:auto;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#fff;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:720px;
+    }
+    th,td{
+      padding:11px 10px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      font-size:14px;
+      vertical-align:top;
+    }
+    th{
+      background:#f9fafb;
+      color:#374151;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+    tr:last-child td{border-bottom:0}
+    .notice{
+      background:#fffbeb;
+      border:1px solid #fde68a;
+      color:#92400e;
+      border-radius:16px;
+      padding:12px 14px;
+      line-height:1.4;
+      margin-bottom:12px;
+    }
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(17,24,39,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:100;
+    }
+    .modal-backdrop.show{display:flex}
+    .modal{
+      background:#fff;
+      border-radius:22px;
+      max-width:780px;
+      width:100%;
+      max-height:90vh;
+      overflow:auto;
+      box-shadow:0 25px 70px rgba(0,0,0,.25);
+      padding:16px;
+    }
+    .modal-head{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      margin-bottom:10px;
+    }
+    .modal-head h2{margin:0}
+    .floating{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      z-index:30;
+    }
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:20px;
+      transform:translateX(-50%) translateY(80px);
+      background:#111827;
+      color:#fff;
+      border-radius:999px;
+      padding:11px 16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      opacity:0;
+      transition:.25s ease;
+      z-index:200;
+      font-size:14px;
+      font-weight:700;
+    }
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+    .mobile-only{display:none}
+    @media(max-width:800px){
+      header{padding:17px 13px 20px}
+      .header-wrap{display:block}
+      .brand h1{font-size:22px}
+      .quick-actions{justify-content:flex-start;margin-top:12px}
+      main{margin-top:12px;padding:0 10px}
+      .grid-2,.grid-3,.grid-4,.form-row,.form-row.three{
+        grid-template-columns:1fr;
+      }
+      .section-title{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+      .item-head{
+        flex-direction:column;
+      }
+      .item-head .actions{
+        width:100%;
+      }
+      .item-head .actions button{
+        flex:1;
+      }
+      .mobile-only{display:inline-flex}
+      .desktop-only{display:none}
+      .floating{right:10px;bottom:10px}
+      .floating button{box-shadow:0 10px 25px rgba(17,24,39,.2)}
+    }
+    @media print{
+      header,nav,.filters,.actions,.floating,.modal-backdrop{display:none!important}
+      main{margin:0;max-width:100%;padding:0}
+      .card{box-shadow:none;border:1px solid #999;break-inside:avoid}
+      body{background:#fff}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-wrap">
+      <div class="brand">
+        <h1>📚 Agenda Docente</h1>
+        <p>Controle pessoal de aulas, atividades, avaliações e prazos do professor.</p>
+      </div>
+      <div class="quick-actions">
+        <button onclick="openLessonModal()">+ Aula</button>
+        <button class="light" onclick="openTaskModal()">+ Atividade</button>
+        <button class="secondary" onclick="showTab('relatorios')">Relatórios</button>
+        <button id="installBtn" class="success" style="display:none" onclick="installPWA()">Instalar app</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="dashboard" onclick="showTab('dashboard')">Dashboard</button>
+      <button class="tab-btn" data-tab="aulas" onclick="showTab('aulas')">Aulas</button>
+      <button class="tab-btn" data-tab="atividades" onclick="showTab('atividades')">Atividades</button>
+      <button class="tab-btn" data-tab="cadastros" onclick="showTab('cadastros')">Turmas e Disciplinas</button>
+      <button class="tab-btn" data-tab="relatorios" onclick="showTab('relatorios')">Relatórios</button>
+      <button class="tab-btn" data-tab="config" onclick="showTab('config')">Configurações</button>
+    </nav>
+
+    <section id="dashboard" class="screen active">
+      <div class="grid grid-4">
+        <div class="card stat">
+          <div>
+            <div class="label">Aulas hoje</div>
+            <div class="value" id="statAulasHoje">0</div>
+          </div>
+          <div class="icon">📅</div>
+        </div>
+        <div class="card stat">
+          <div>
+            <div class="label">Pendentes</div>
+            <div class="value" id="statAtivPend">0</div>
+          </div>
+          <div class="icon">📝</div>
+        </div>
+        <div class="card stat">
+          <div>
+            <div class="label">Ministradas na semana</div>
+            <div class="value" id="statMinistradasSemana">0</div>
+          </div>
+          <div class="icon">✅</div>
+        </div>
+        <div class="card stat">
+          <div>
+            <div class="label">Aulas planejadas</div>
+            <div class="value" id="statPlanejadas">0</div>
+          </div>
+          <div class="icon">📌</div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Hoje</h2>
+        <div class="actions">
+          <button class="small ghost" onclick="print()">Imprimir</button>
+          <button class="small" onclick="openLessonModal()">Nova aula</button>
+        </div>
+      </div>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Aulas de hoje</h3>
+          <div id="todayLessons" class="list"></div>
+        </div>
+        <div class="card">
+          <h3>Próximos prazos</h3>
+          <div id="nextDeadlines" class="list"></div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Próximas aulas</h2>
+        <button class="small ghost" onclick="showTab('aulas')">Ver todas</button>
+      </div>
+      <div class="card">
+        <div id="upcomingLessons" class="list"></div>
+      </div>
+    </section>
+
+    <section id="aulas" class="screen">
+      <div class="section-title">
+        <h2>Agenda de aulas</h2>
+        <button onclick="openLessonModal()">+ Cadastrar aula</button>
+      </div>
+
+      <div class="filters">
+        <div class="form-row three">
+          <label>Data
+            <input type="date" id="filterLessonDate" oninput="renderLessons()" />
+          </label>
+          <label>Turma
+            <select id="filterLessonClass" onchange="renderLessons()"></select>
+          </label>
+          <label>Status
+            <select id="filterLessonStatus" onchange="renderLessons()">
+              <option value="">Todos</option>
+              <option value="planejada">Planejada</option>
+              <option value="ministrada">Ministrada</option>
+              <option value="nao-realizada">Não realizada</option>
+            </select>
+          </label>
+        </div>
+        <div class="form-row">
+          <label>Disciplina
+            <select id="filterLessonSubject" onchange="renderLessons()"></select>
+          </label>
+          <label>Pesquisar
+            <input type="search" id="filterLessonText" placeholder="Conteúdo, atividade ou observação" oninput="renderLessons()" />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="small ghost" onclick="clearLessonFilters()">Limpar filtros</button>
+          <button class="small light" onclick="exportLessonsCSV()">Exportar aulas CSV</button>
+        </div>
+      </div>
+
+      <div id="lessonList" class="list"></div>
+    </section>
+
+    <section id="atividades" class="screen">
+      <div class="section-title">
+        <h2>Atividades e avaliações</h2>
+        <button onclick="openTaskModal()">+ Cadastrar atividade</button>
+      </div>
+
+      <div class="filters">
+        <div class="form-row three">
+          <label>Prazo
+            <input type="date" id="filterTaskDeadline" oninput="renderTasks()" />
+          </label>
+          <label>Turma
+            <select id="filterTaskClass" onchange="renderTasks()"></select>
+          </label>
+          <label>Status
+            <select id="filterTaskStatus" onchange="renderTasks()">
+              <option value="">Todos</option>
+              <option value="pendente">Pendente</option>
+              <option value="aplicada">Aplicada</option>
+              <option value="corrigida">Corrigida</option>
+            </select>
+          </label>
+        </div>
+        <div class="form-row">
+          <label>Disciplina
+            <select id="filterTaskSubject" onchange="renderTasks()"></select>
+          </label>
+          <label>Pesquisar
+            <input type="search" id="filterTaskText" placeholder="Título ou descrição" oninput="renderTasks()" />
+          </label>
+        </div>
+        <div class="actions">
+          <button class="small ghost" onclick="clearTaskFilters()">Limpar filtros</button>
+          <button class="small light" onclick="exportTasksCSV()">Exportar atividades CSV</button>
+        </div>
+      </div>
+
+      <div id="taskList" class="list"></div>
+    </section>
+
+    <section id="cadastros" class="screen">
+      <div class="grid grid-2">
+        <div class="card">
+          <h2>Turmas</h2>
+          <form onsubmit="addClass(event)">
+            <label>Nova turma
+              <input id="newClassName" placeholder="Ex.: 1º Ano Desenvolvimento de Sistemas" />
+            </label>
+            <button type="submit">Adicionar turma</button>
+          </form>
+          <div class="section-title"><h3>Turmas cadastradas</h3></div>
+          <div id="classList" class="list"></div>
+        </div>
+
+        <div class="card">
+          <h2>Disciplinas</h2>
+          <form onsubmit="addSubject(event)">
+            <label>Nova disciplina
+              <input id="newSubjectName" placeholder="Ex.: Modelagem de Banco de Dados" />
+            </label>
+            <button type="submit">Adicionar disciplina</button>
+          </form>
+          <div class="section-title"><h3>Disciplinas cadastradas</h3></div>
+          <div id="subjectList" class="list"></div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <h2>Atalho para começar rápido</h2>
+        <p class="muted">Use este botão para inserir exemplos comuns do Ensino Médio Técnico. Você pode apagar depois.</p>
+        <button class="light" onclick="loadTeacherDefaults()">Carregar turmas e disciplinas exemplo</button>
+      </div>
+    </section>
+
+    <section id="relatorios" class="screen">
+      <div class="section-title">
+        <h2>Relatórios</h2>
+        <div class="actions">
+          <button class="small ghost" onclick="print()">Imprimir relatório</button>
+          <button class="small light" onclick="exportFullBackup()">Baixar backup JSON</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="form-row">
+          <label>Escolha uma data da semana
+            <input type="date" id="reportDate" onchange="renderReports()" />
+          </label>
+          <label>Turma
+            <select id="reportClass" onchange="renderReports()"></select>
+          </label>
+        </div>
+      </div>
+
+      <div class="grid grid-3" style="margin-top:14px">
+        <div class="card stat">
+          <div>
+            <div class="label">Aulas no período</div>
+            <div class="value" id="reportTotalLessons">0</div>
+          </div>
+          <div class="icon">📚</div>
+        </div>
+        <div class="card stat">
+          <div>
+            <div class="label">Ministradas</div>
+            <div class="value" id="reportDoneLessons">0</div>
+          </div>
+          <div class="icon">✅</div>
+        </div>
+        <div class="card stat">
+          <div>
+            <div class="label">Atividades</div>
+            <div class="value" id="reportTotalTasks">0</div>
+          </div>
+          <div class="icon">📝</div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Resumo semanal</h2>
+      </div>
+      <div class="card">
+        <div id="weeklyReport"></div>
+      </div>
+    </section>
+
+    <section id="config" class="screen">
+      <div class="notice">
+        Os dados ficam salvos no navegador deste aparelho. Para segurança, baixe um backup JSON de vez em quando.
+      </div>
+
+      <div class="grid grid-2">
+        <div class="card">
+          <h2>Backup</h2>
+          <p class="muted">Baixe ou importe seus dados.</p>
+          <div class="actions">
+            <button onclick="exportFullBackup()">Baixar backup JSON</button>
+            <button class="ghost" onclick="document.getElementById('importFile').click()">Importar backup</button>
+            <input id="importFile" type="file" accept=".json,application/json" hidden onchange="importBackup(event)" />
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Limpeza</h2>
+          <p class="muted">Use com cuidado. Esta ação apaga os dados salvos neste navegador.</p>
+          <button class="danger" onclick="resetAll()">Apagar todos os dados</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="floating">
+    <button onclick="openLessonModal()">+ Aula</button>
+    <button class="light" onclick="openTaskModal()">+ Atividade</button>
+  </div>
+
+  <div id="lessonModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="lessonModalTitle">Cadastrar aula</h2>
+        <button class="small ghost" onclick="closeLessonModal()">Fechar</button>
+      </div>
+      <form id="lessonForm" onsubmit="saveLesson(event)">
+        <input type="hidden" id="lessonId" />
+        <div class="form-row three">
+          <label>Data
+            <input type="date" id="lessonDate" required />
+          </label>
+          <label>Horário
+            <input type="time" id="lessonTime" />
+          </label>
+          <label>Status
+            <select id="lessonStatus" required>
+              <option value="planejada">Planejada</option>
+              <option value="ministrada">Ministrada</option>
+              <option value="nao-realizada">Não realizada</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>Turma
+            <select id="lessonClass" required></select>
+          </label>
+          <label>Disciplina
+            <select id="lessonSubject" required></select>
+          </label>
+        </div>
+
+        <label>Conteúdo da aula
+          <input id="lessonContent" placeholder="Ex.: Normalização 1FN, Diagrama de Classes, Sistemas Operacionais..." required />
+        </label>
+
+        <label>Metodologia
+          <textarea id="lessonMethod" placeholder="Ex.: explicação rápida, exemplo no quadro, prática guiada e desafio individual."></textarea>
+        </label>
+
+        <label>Atividade aplicada
+          <textarea id="lessonActivity" placeholder="Ex.: resolver um caso prático no caderno ou laboratório."></textarea>
+        </label>
+
+        <label>Observações
+          <textarea id="lessonNotes" placeholder="Dificuldades da turma, conteúdo que precisa revisar, alunos que precisam de atenção..."></textarea>
+        </label>
+
+        <div class="actions">
+          <button type="submit">Salvar aula</button>
+          <button type="button" class="ghost" onclick="closeLessonModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="taskModal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-head">
+        <h2 id="taskModalTitle">Cadastrar atividade</h2>
+        <button class="small ghost" onclick="closeTaskModal()">Fechar</button>
+      </div>
+      <form id="taskForm" onsubmit="saveTask(event)">
+        <input type="hidden" id="taskId" />
+        <label>Título
+          <input id="taskTitle" placeholder="Ex.: Atividade prática de Diagrama de Classes" required />
+        </label>
+
+        <div class="form-row">
+          <label>Turma
+            <select id="taskClass" required></select>
+          </label>
+          <label>Disciplina
+            <select id="taskSubject" required></select>
+          </label>
+        </div>
+
+        <div class="form-row three">
+          <label>Data de aplicação
+            <input type="date" id="taskApplyDate" />
+          </label>
+          <label>Prazo
+            <input type="date" id="taskDeadline" />
+          </label>
+          <label>Status
+            <select id="taskStatus" required>
+              <option value="pendente">Pendente</option>
+              <option value="aplicada">Aplicada</option>
+              <option value="corrigida">Corrigida</option>
+            </select>
+          </label>
+        </div>
+
+        <label>Descrição
+          <textarea id="taskDescription" placeholder="Explique o que o aluno deve fazer ou o que será cobrado."></textarea>
+        </label>
+
+        <div class="actions">
+          <button type="submit">Salvar atividade</button>
+          <button type="button" class="ghost" onclick="closeTaskModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+<script>
+const STORAGE_KEY = "agenda_docente_v1";
+
+let state = {
+  classes: [],
+  subjects: [],
+  lessons: [],
+  tasks: []
+};
+
+const teacherDefaults = {
+  classes: [
+    "1º Ano Desenvolvimento de Sistemas",
+    "1º Ano Programação de Jogos"
+  ],
+  subjects: [
+    "Modelagem de Banco de Dados",
+    "Métodos Ágeis de Desenvolvimento",
+    "Arquitetura de Computadores e Redes",
+    "Sistemas Operacionais",
+    "Game Design e Narrativa Interativa",
+    "Arte Digital",
+    "Lógica de Programação e Motores 2D",
+    "Projeto de Jogo"
+  ]
+};
+
+function uid(){
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+}
+
+function todayISO(){
+  const d = new Date();
+  const tz = d.getTimezoneOffset();
+  const local = new Date(d.getTime() - tz*60000);
+  return local.toISOString().slice(0,10);
+}
+
+function formatDate(dateStr){
+  if(!dateStr) return "Sem data";
+  const [y,m,d] = dateStr.split("-");
+  return `${d}/${m}/${y}`;
+}
+
+function formatStatus(status){
+  const map = {
+    "planejada":"Planejada",
+    "ministrada":"Ministrada",
+    "nao-realizada":"Não realizada",
+    "pendente":"Pendente",
+    "aplicada":"Aplicada",
+    "corrigida":"Corrigida",
+    "atrasada":"Atrasada"
+  };
+  return map[status] || status;
+}
+
+function escapeHTML(text){
+  return String(text || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function loadState(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(raw){
+    try{
+      const parsed = JSON.parse(raw);
+      state = {
+        classes: Array.isArray(parsed.classes) ? parsed.classes : [],
+        subjects: Array.isArray(parsed.subjects) ? parsed.subjects : [],
+        lessons: Array.isArray(parsed.lessons) ? parsed.lessons : [],
+        tasks: Array.isArray(parsed.tasks) ? parsed.tasks : []
+      };
+    }catch(e){
+      console.error(e);
+      toast("Não foi possível carregar os dados salvos.");
+    }
+  }
+  if(state.classes.length === 0 && state.subjects.length === 0 && state.lessons.length === 0 && state.tasks.length === 0){
+    state.classes = [];
+    state.subjects = [];
+  }
+}
+
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function toast(message){
+  const el = document.getElementById("toast");
+  el.textContent = message;
+  el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"), 2200);
+}
+
+function showTab(tab){
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+  document.getElementById(tab).classList.add("active");
+  const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+  if(btn) btn.classList.add("active");
+  renderAll();
+}
+
+function fillSelect(selectId, items, placeholder="Todos"){
+  const select = document.getElementById(selectId);
+  if(!select) return;
+  const current = select.value;
+  select.innerHTML = "";
+  const opt = document.createElement("option");
+  opt.value = "";
+  opt.textContent = placeholder;
+  select.appendChild(opt);
+  items.forEach(item => {
+    const o = document.createElement("option");
+    o.value = item;
+    o.textContent = item;
+    select.appendChild(o);
+  });
+  if([...select.options].some(o => o.value === current)) select.value = current;
+}
+
+function fillRequiredSelect(selectId, items, placeholder="Selecione"){
+  const select = document.getElementById(selectId);
+  if(!select) return;
+  const current = select.value;
+  select.innerHTML = "";
+  const opt = document.createElement("option");
+  opt.value = "";
+  opt.textContent = placeholder;
+  opt.disabled = true;
+  opt.selected = true;
+  select.appendChild(opt);
+  items.forEach(item => {
+    const o = document.createElement("option");
+    o.value = item;
+    o.textContent = item;
+    select.appendChild(o);
+  });
+  if([...select.options].some(o => o.value === current)) select.value = current;
+}
+
+function renderSelects(){
+  const classSelects = ["filterLessonClass","filterTaskClass","reportClass"];
+  const subjectSelects = ["filterLessonSubject","filterTaskSubject"];
+  classSelects.forEach(id => fillSelect(id, state.classes, "Todas"));
+  subjectSelects.forEach(id => fillSelect(id, state.subjects, "Todas"));
+
+  fillRequiredSelect("lessonClass", state.classes);
+  fillRequiredSelect("lessonSubject", state.subjects);
+  fillRequiredSelect("taskClass", state.classes);
+  fillRequiredSelect("taskSubject", state.subjects);
+}
+
+function renderDashboard(){
+  const today = todayISO();
+  const week = getWeekRange(new Date(today + "T00:00:00"));
+  const todayLessons = state.lessons.filter(l => l.date === today)
+    .sort((a,b)=>(a.time||"99:99").localeCompare(b.time||"99:99"));
+  const pendingTasks = state.tasks.filter(t => t.status !== "corrigida");
+  const ministradasSemana = state.lessons.filter(l => l.status === "ministrada" && l.date >= week.start && l.date <= week.end);
+  const planejadas = state.lessons.filter(l => l.status === "planejada");
+
+  document.getElementById("statAulasHoje").textContent = todayLessons.length;
+  document.getElementById("statAtivPend").textContent = pendingTasks.length;
+  document.getElementById("statMinistradasSemana").textContent = ministradasSemana.length;
+  document.getElementById("statPlanejadas").textContent = planejadas.length;
+
+  renderMiniLessonList("todayLessons", todayLessons, "Nenhuma aula cadastrada para hoje.");
+  const deadlines = [...state.tasks]
+    .filter(t => t.status !== "corrigida")
+    .sort((a,b)=>(a.deadline||"9999-99-99").localeCompare(b.deadline||"9999-99-99"))
+    .slice(0,5);
+  renderMiniTaskList("nextDeadlines", deadlines, "Nenhum prazo pendente.");
+
+  const upcoming = [...state.lessons]
+    .filter(l => l.date >= today)
+    .sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))
+    .slice(0,6);
+  renderMiniLessonList("upcomingLessons", upcoming, "Nenhuma próxima aula cadastrada.");
+}
+
+function renderMiniLessonList(id, lessons, emptyMsg){
+  const el = document.getElementById(id);
+  if(!lessons.length){
+    el.innerHTML = `<div class="empty">${emptyMsg}</div>`;
+    return;
+  }
+  el.innerHTML = lessons.map(l => `
+    <div class="item">
+      <div class="item-head">
+        <div>
+          <div class="item-title">${escapeHTML(l.content)}</div>
+          <div class="chips">
+            <span class="chip">${formatDate(l.date)} ${l.time ? "às " + l.time : ""}</span>
+            <span class="chip">${escapeHTML(l.className)}</span>
+            <span class="chip">${escapeHTML(l.subject)}</span>
+            <span class="chip status-${l.status}">${formatStatus(l.status)}</span>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="small success" onclick="markLessonDone('${l.id}')">Ministrada</button>
+          <button class="small ghost" onclick="editLesson('${l.id}')">Editar</button>
+        </div>
+      </div>
+      ${l.activity ? `<p><strong>Atividade:</strong> ${escapeHTML(l.activity)}</p>` : ""}
+    </div>
+  `).join("");
+}
+
+function renderMiniTaskList(id, tasks, emptyMsg){
+  const el = document.getElementById(id);
+  if(!tasks.length){
+    el.innerHTML = `<div class="empty">${emptyMsg}</div>`;
+    return;
+  }
+  el.innerHTML = tasks.map(t => {
+    const finalStatus = taskVisualStatus(t);
+    return `
+    <div class="item">
+      <div class="item-head">
+        <div>
+          <div class="item-title">${escapeHTML(t.title)}</div>
+          <div class="chips">
+            <span class="chip">Prazo: ${formatDate(t.deadline)}</span>
+            <span class="chip">${escapeHTML(t.className)}</span>
+            <span class="chip">${escapeHTML(t.subject)}</span>
+            <span class="chip status-${finalStatus}">${formatStatus(finalStatus)}</span>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="small ghost" onclick="editTask('${t.id}')">Editar</button>
+        </div>
+      </div>
+    </div>
+  `}).join("");
+}
+
+function renderLessons(){
+  const list = document.getElementById("lessonList");
+  if(!list) return;
+  const date = document.getElementById("filterLessonDate").value;
+  const cls = document.getElementById("filterLessonClass").value;
+  const subj = document.getElementById("filterLessonSubject").value;
+  const status = document.getElementById("filterLessonStatus").value;
+  const text = document.getElementById("filterLessonText").value.toLowerCase().trim();
+
+  let lessons = [...state.lessons];
+  if(date) lessons = lessons.filter(l => l.date === date);
+  if(cls) lessons = lessons.filter(l => l.className === cls);
+  if(subj) lessons = lessons.filter(l => l.subject === subj);
+  if(status) lessons = lessons.filter(l => l.status === status);
+  if(text){
+    lessons = lessons.filter(l => `${l.content} ${l.method} ${l.activity} ${l.notes}`.toLowerCase().includes(text));
+  }
+
+  lessons.sort((a,b)=>(b.date + (b.time||"")).localeCompare(a.date + (a.time||"")));
+
+  if(!lessons.length){
+    list.innerHTML = `<div class="empty">Nenhuma aula encontrada. Cadastre uma aula ou ajuste os filtros.</div>`;
+    return;
+  }
+
+  list.innerHTML = lessons.map(l => `
+    <div class="item">
+      <div class="item-head">
+        <div>
+          <div class="item-title">${escapeHTML(l.content)}</div>
+          <div class="chips">
+            <span class="chip">${formatDate(l.date)} ${l.time ? "às " + l.time : ""}</span>
+            <span class="chip">${escapeHTML(l.className)}</span>
+            <span class="chip">${escapeHTML(l.subject)}</span>
+            <span class="chip status-${l.status}">${formatStatus(l.status)}</span>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="small success" onclick="markLessonDone('${l.id}')">Ministrada</button>
+          <button class="small warning" onclick="duplicateLesson('${l.id}')">Duplicar</button>
+          <button class="small ghost" onclick="editLesson('${l.id}')">Editar</button>
+          <button class="small danger" onclick="deleteLesson('${l.id}')">Excluir</button>
+        </div>
+      </div>
+      ${l.method ? `<p><strong>Metodologia:</strong> ${escapeHTML(l.method)}</p>` : ""}
+      ${l.activity ? `<p><strong>Atividade:</strong> ${escapeHTML(l.activity)}</p>` : ""}
+      ${l.notes ? `<p><strong>Observações:</strong> ${escapeHTML(l.notes)}</p>` : ""}
+    </div>
+  `).join("");
+}
+
+function renderTasks(){
+  const list = document.getElementById("taskList");
+  if(!list) return;
+  const deadline = document.getElementById("filterTaskDeadline").value;
+  const cls = document.getElementById("filterTaskClass").value;
+  const subj = document.getElementById("filterTaskSubject").value;
+  const status = document.getElementById("filterTaskStatus").value;
+  const text = document.getElementById("filterTaskText").value.toLowerCase().trim();
+
+  let tasks = [...state.tasks];
+  if(deadline) tasks = tasks.filter(t => t.deadline === deadline);
+  if(cls) tasks = tasks.filter(t => t.className === cls);
+  if(subj) tasks = tasks.filter(t => t.subject === subj);
+  if(status) tasks = tasks.filter(t => t.status === status);
+  if(text){
+    tasks = tasks.filter(t => `${t.title} ${t.description}`.toLowerCase().includes(text));
+  }
+
+  tasks.sort((a,b)=>(a.deadline||"9999-99-99").localeCompare(b.deadline||"9999-99-99"));
+
+  if(!tasks.length){
+    list.innerHTML = `<div class="empty">Nenhuma atividade encontrada. Cadastre uma atividade ou ajuste os filtros.</div>`;
+    return;
+  }
+
+  list.innerHTML = tasks.map(t => {
+    const finalStatus = taskVisualStatus(t);
+    return `
+    <div class="item">
+      <div class="item-head">
+        <div>
+          <div class="item-title">${escapeHTML(t.title)}</div>
+          <div class="chips">
+            <span class="chip">Aplicação: ${formatDate(t.applyDate)}</span>
+            <span class="chip">Prazo: ${formatDate(t.deadline)}</span>
+            <span class="chip">${escapeHTML(t.className)}</span>
+            <span class="chip">${escapeHTML(t.subject)}</span>
+            <span class="chip status-${finalStatus}">${formatStatus(finalStatus)}</span>
+          </div>
+        </div>
+        <div class="actions">
+          <button class="small success" onclick="markTaskCorrected('${t.id}')">Corrigida</button>
+          <button class="small ghost" onclick="editTask('${t.id}')">Editar</button>
+          <button class="small danger" onclick="deleteTask('${t.id}')">Excluir</button>
+        </div>
+      </div>
+      ${t.description ? `<p><strong>Descrição:</strong> ${escapeHTML(t.description)}</p>` : ""}
+    </div>
+  `}).join("");
+}
+
+function taskVisualStatus(t){
+  const today = todayISO();
+  if(t.status !== "corrigida" && t.deadline && t.deadline < today) return "atrasada";
+  return t.status;
+}
+
+function clearLessonFilters(){
+  ["filterLessonDate","filterLessonClass","filterLessonSubject","filterLessonStatus","filterLessonText"].forEach(id => document.getElementById(id).value = "");
+  renderLessons();
+}
+
+function clearTaskFilters(){
+  ["filterTaskDeadline","filterTaskClass","filterTaskSubject","filterTaskStatus","filterTaskText"].forEach(id => document.getElementById(id).value = "");
+  renderTasks();
+}
+
+function openLessonModal(){
+  if(state.classes.length === 0 || state.subjects.length === 0){
+    toast("Cadastre ao menos uma turma e uma disciplina.");
+    showTab("cadastros");
+    return;
+  }
+  document.getElementById("lessonForm").reset();
+  document.getElementById("lessonId").value = "";
+  document.getElementById("lessonModalTitle").textContent = "Cadastrar aula";
+  document.getElementById("lessonDate").value = todayISO();
+  document.getElementById("lessonStatus").value = "planejada";
+  renderSelects();
+  document.getElementById("lessonModal").classList.add("show");
+}
+
+function closeLessonModal(){
+  document.getElementById("lessonModal").classList.remove("show");
+}
+
+function saveLesson(e){
+  e.preventDefault();
+  const id = document.getElementById("lessonId").value;
+  const lesson = {
+    id: id || uid(),
+    date: document.getElementById("lessonDate").value,
+    time: document.getElementById("lessonTime").value,
+    className: document.getElementById("lessonClass").value,
+    subject: document.getElementById("lessonSubject").value,
+    content: document.getElementById("lessonContent").value.trim(),
+    method: document.getElementById("lessonMethod").value.trim(),
+    activity: document.getElementById("lessonActivity").value.trim(),
+    notes: document.getElementById("lessonNotes").value.trim(),
+    status: document.getElementById("lessonStatus").value
+  };
+
+  if(id){
+    const index = state.lessons.findIndex(l => l.id === id);
+    if(index >= 0) state.lessons[index] = lesson;
+  }else{
+    state.lessons.push(lesson);
+  }
+
+  saveState();
+  closeLessonModal();
+  renderAll();
+  toast("Aula salva com sucesso.");
+}
+
+function editLesson(id){
+  const l = state.lessons.find(x => x.id === id);
+  if(!l) return;
+  renderSelects();
+  document.getElementById("lessonId").value = l.id;
+  document.getElementById("lessonDate").value = l.date;
+  document.getElementById("lessonTime").value = l.time || "";
+  document.getElementById("lessonClass").value = l.className;
+  document.getElementById("lessonSubject").value = l.subject;
+  document.getElementById("lessonContent").value = l.content;
+  document.getElementById("lessonMethod").value = l.method || "";
+  document.getElementById("lessonActivity").value = l.activity || "";
+  document.getElementById("lessonNotes").value = l.notes || "";
+  document.getElementById("lessonStatus").value = l.status;
+  document.getElementById("lessonModalTitle").textContent = "Editar aula";
+  document.getElementById("lessonModal").classList.add("show");
+}
+
+function deleteLesson(id){
+  if(!confirm("Deseja excluir esta aula?")) return;
+  state.lessons = state.lessons.filter(l => l.id !== id);
+  saveState();
+  renderAll();
+  toast("Aula excluída.");
+}
+
+function markLessonDone(id){
+  const l = state.lessons.find(x => x.id === id);
+  if(!l) return;
+  l.status = "ministrada";
+  saveState();
+  renderAll();
+  toast("Aula marcada como ministrada.");
+}
+
+function duplicateLesson(id){
+  const l = state.lessons.find(x => x.id === id);
+  if(!l) return;
+  const copy = {...l, id: uid(), status:"planejada"};
+  state.lessons.push(copy);
+  saveState();
+  renderAll();
+  toast("Aula duplicada. Edite a data se necessário.");
+}
+
+function openTaskModal(){
+  if(state.classes.length === 0 || state.subjects.length === 0){
+    toast("Cadastre ao menos uma turma e uma disciplina.");
+    showTab("cadastros");
+    return;
+  }
+  document.getElementById("taskForm").reset();
+  document.getElementById("taskId").value = "";
+  document.getElementById("taskModalTitle").textContent = "Cadastrar atividade";
+  document.getElementById("taskApplyDate").value = todayISO();
+  document.getElementById("taskStatus").value = "pendente";
+  renderSelects();
+  document.getElementById("taskModal").classList.add("show");
+}
+
+function closeTaskModal(){
+  document.getElementById("taskModal").classList.remove("show");
+}
+
+function saveTask(e){
+  e.preventDefault();
+  const id = document.getElementById("taskId").value;
+  const task = {
+    id: id || uid(),
+    title: document.getElementById("taskTitle").value.trim(),
+    className: document.getElementById("taskClass").value,
+    subject: document.getElementById("taskSubject").value,
+    applyDate: document.getElementById("taskApplyDate").value,
+    deadline: document.getElementById("taskDeadline").value,
+    status: document.getElementById("taskStatus").value,
+    description: document.getElementById("taskDescription").value.trim()
+  };
+
+  if(id){
+    const index = state.tasks.findIndex(t => t.id === id);
+    if(index >= 0) state.tasks[index] = task;
+  }else{
+    state.tasks.push(task);
+  }
+
+  saveState();
+  closeTaskModal();
+  renderAll();
+  toast("Atividade salva com sucesso.");
+}
+
+function editTask(id){
+  const t = state.tasks.find(x => x.id === id);
+  if(!t) return;
+  renderSelects();
+  document.getElementById("taskId").value = t.id;
+  document.getElementById("taskTitle").value = t.title;
+  document.getElementById("taskClass").value = t.className;
+  document.getElementById("taskSubject").value = t.subject;
+  document.getElementById("taskApplyDate").value = t.applyDate || "";
+  document.getElementById("taskDeadline").value = t.deadline || "";
+  document.getElementById("taskStatus").value = t.status;
+  document.getElementById("taskDescription").value = t.description || "";
+  document.getElementById("taskModalTitle").textContent = "Editar atividade";
+  document.getElementById("taskModal").classList.add("show");
+}
+
+function deleteTask(id){
+  if(!confirm("Deseja excluir esta atividade?")) return;
+  state.tasks = state.tasks.filter(t => t.id !== id);
+  saveState();
+  renderAll();
+  toast("Atividade excluída.");
+}
+
+function markTaskCorrected(id){
+  const t = state.tasks.find(x => x.id === id);
+  if(!t) return;
+  t.status = "corrigida";
+  saveState();
+  renderAll();
+  toast("Atividade marcada como corrigida.");
+}
+
+function addClass(e){
+  e.preventDefault();
+  const input = document.getElementById("newClassName");
+  const name = input.value.trim();
+  if(!name) return;
+  if(state.classes.includes(name)){
+    toast("Esta turma já existe.");
+    return;
+  }
+  state.classes.push(name);
+  state.classes.sort();
+  input.value = "";
+  saveState();
+  renderAll();
+  toast("Turma adicionada.");
+}
+
+function addSubject(e){
+  e.preventDefault();
+  const input = document.getElementById("newSubjectName");
+  const name = input.value.trim();
+  if(!name) return;
+  if(state.subjects.includes(name)){
+    toast("Esta disciplina já existe.");
+    return;
+  }
+  state.subjects.push(name);
+  state.subjects.sort();
+  input.value = "";
+  saveState();
+  renderAll();
+  toast("Disciplina adicionada.");
+}
+
+function removeClass(name){
+  const used = state.lessons.some(l => l.className === name) || state.tasks.some(t => t.className === name);
+  if(used){
+    alert("Esta turma já está sendo usada em aulas ou atividades. Apague ou edite os registros antes.");
+    return;
+  }
+  if(!confirm("Remover esta turma?")) return;
+  state.classes = state.classes.filter(c => c !== name);
+  saveState();
+  renderAll();
+}
+
+function removeSubject(name){
+  const used = state.lessons.some(l => l.subject === name) || state.tasks.some(t => t.subject === name);
+  if(used){
+    alert("Esta disciplina já está sendo usada em aulas ou atividades. Apague ou edite os registros antes.");
+    return;
+  }
+  if(!confirm("Remover esta disciplina?")) return;
+  state.subjects = state.subjects.filter(s => s !== name);
+  saveState();
+  renderAll();
+}
+
+function renderRegistrations(){
+  const classList = document.getElementById("classList");
+  const subjectList = document.getElementById("subjectList");
+  classList.innerHTML = state.classes.length ? state.classes.map(c => `
+    <div class="item">
+      <div class="item-head">
+        <div class="item-title">${escapeHTML(c)}</div>
+        <button class="small danger" onclick="removeClass('${escapeJS(c)}')">Remover</button>
+      </div>
+    </div>
+  `).join("") : `<div class="empty">Nenhuma turma cadastrada.</div>`;
+
+  subjectList.innerHTML = state.subjects.length ? state.subjects.map(s => `
+    <div class="item">
+      <div class="item-head">
+        <div class="item-title">${escapeHTML(s)}</div>
+        <button class="small danger" onclick="removeSubject('${escapeJS(s)}')">Remover</button>
+      </div>
+    </div>
+  `).join("") : `<div class="empty">Nenhuma disciplina cadastrada.</div>`;
+}
+
+function escapeJS(text){
+  return String(text || "").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+}
+
+function loadTeacherDefaults(){
+  let added = 0;
+  teacherDefaults.classes.forEach(c => {
+    if(!state.classes.includes(c)){state.classes.push(c); added++;}
+  });
+  teacherDefaults.subjects.forEach(s => {
+    if(!state.subjects.includes(s)){state.subjects.push(s); added++;}
+  });
+  state.classes.sort();
+  state.subjects.sort();
+  saveState();
+  renderAll();
+  toast(added ? "Exemplos carregados." : "Os exemplos já estavam cadastrados.");
+}
+
+function getWeekRange(date){
+  const d = new Date(date);
+  const day = d.getDay();
+  const diffToMonday = (day === 0 ? -6 : 1 - day);
+  const start = new Date(d);
+  start.setDate(d.getDate() + diffToMonday);
+  const end = new Date(start);
+  end.setDate(start.getDate() + 6);
+  const toISO = x => {
+    const tz = x.getTimezoneOffset();
+    return new Date(x.getTime() - tz*60000).toISOString().slice(0,10);
+  };
+  return {start: toISO(start), end: toISO(end)};
+}
+
+function renderReports(){
+  const dateInput = document.getElementById("reportDate");
+  if(!dateInput.value) dateInput.value = todayISO();
+  const range = getWeekRange(new Date(dateInput.value + "T00:00:00"));
+  const cls = document.getElementById("reportClass").value;
+
+  let lessons = state.lessons.filter(l => l.date >= range.start && l.date <= range.end);
+  let tasks = state.tasks.filter(t => {
+    const d = t.applyDate || t.deadline || "";
+    return d >= range.start && d <= range.end;
+  });
+  if(cls){
+    lessons = lessons.filter(l => l.className === cls);
+    tasks = tasks.filter(t => t.className === cls);
+  }
+
+  document.getElementById("reportTotalLessons").textContent = lessons.length;
+  document.getElementById("reportDoneLessons").textContent = lessons.filter(l => l.status === "ministrada").length;
+  document.getElementById("reportTotalTasks").textContent = tasks.length;
+
+  const byDay = {};
+  for(let i=0;i<7;i++){
+    const d = new Date(range.start + "T00:00:00");
+    d.setDate(d.getDate()+i);
+    const iso = d.toISOString().slice(0,10);
+    byDay[iso] = {
+      lessons: lessons.filter(l => l.date === iso).sort((a,b)=>(a.time||"99:99").localeCompare(b.time||"99:99")),
+      tasks: tasks.filter(t => (t.applyDate || t.deadline) === iso)
+    };
+  }
+
+  const html = Object.entries(byDay).map(([day, data]) => `
+    <div class="item">
+      <div class="item-title">${formatDate(day)}</div>
+      ${data.lessons.length ? `
+        <p><strong>Aulas:</strong></p>
+        <ul>
+          ${data.lessons.map(l => `<li>${l.time ? l.time + " - " : ""}${escapeHTML(l.className)} | ${escapeHTML(l.subject)} | ${escapeHTML(l.content)} (${formatStatus(l.status)})</li>`).join("")}
+        </ul>` : `<p class="muted">Sem aulas cadastradas.</p>`}
+      ${data.tasks.length ? `
+        <p><strong>Atividades:</strong></p>
+        <ul>
+          ${data.tasks.map(t => `<li>${escapeHTML(t.className)} | ${escapeHTML(t.subject)} | ${escapeHTML(t.title)} (${formatStatus(taskVisualStatus(t))})</li>`).join("")}
+        </ul>` : ""}
+    </div>
+  `).join("");
+
+  document.getElementById("weeklyReport").innerHTML = `
+    <p class="muted">Período: ${formatDate(range.start)} a ${formatDate(range.end)}</p>
+    <div class="list">${html}</div>
+  `;
+}
+
+function exportFullBackup(){
+  const data = {
+    app: "Agenda Docente",
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    ...state
+  };
+  downloadText("backup-agenda-docente.json", JSON.stringify(data, null, 2), "application/json");
+}
+
+function importBackup(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const parsed = JSON.parse(reader.result);
+      if(!Array.isArray(parsed.classes) || !Array.isArray(parsed.subjects)){
+        alert("Arquivo inválido.");
+        return;
+      }
+      state = {
+        classes: parsed.classes || [],
+        subjects: parsed.subjects || [],
+        lessons: parsed.lessons || [],
+        tasks: parsed.tasks || []
+      };
+      saveState();
+      renderAll();
+      toast("Backup importado.");
+    }catch(e){
+      alert("Não foi possível importar o arquivo.");
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = "";
+}
+
+function resetAll(){
+  if(!confirm("Tem certeza que deseja apagar tudo?")) return;
+  localStorage.removeItem(STORAGE_KEY);
+  state = {classes: [], subjects: [], lessons: [], tasks: []};
+  renderAll();
+  toast("Dados apagados.");
+}
+
+function downloadText(filename, content, mime){
+  const blob = new Blob([content], {type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function csvEscape(value){
+  const text = String(value || "");
+  return `"${text.replaceAll('"','""')}"`;
+}
+
+function exportLessonsCSV(){
+  const rows = [
+    ["Data","Horario","Turma","Disciplina","Conteudo","Metodologia","Atividade","Observacoes","Status"],
+    ...state.lessons.map(l => [l.date,l.time,l.className,l.subject,l.content,l.method,l.activity,l.notes,formatStatus(l.status)])
+  ];
+  const csv = rows.map(r => r.map(csvEscape).join(";")).join("\n");
+  downloadText("aulas-agenda-docente.csv", csv, "text/csv;charset=utf-8");
+}
+
+function exportTasksCSV(){
+  const rows = [
+    ["Titulo","Turma","Disciplina","Data aplicacao","Prazo","Descricao","Status"],
+    ...state.tasks.map(t => [t.title,t.className,t.subject,t.applyDate,t.deadline,t.description,formatStatus(t.status)])
+  ];
+  const csv = rows.map(r => r.map(csvEscape).join(";")).join("\n");
+  downloadText("atividades-agenda-docente.csv", csv, "text/csv;charset=utf-8");
+}
+
+function renderAll(){
+  renderSelects();
+  renderDashboard();
+  renderLessons();
+  renderTasks();
+  renderRegistrations();
+  renderReports();
+}
+
+document.addEventListener("keydown", (e) => {
+  if(e.key === "Escape"){
+    closeLessonModal();
+    closeTaskModal();
+  }
+});
+
+document.getElementById("lessonModal").addEventListener("click", e => {
+  if(e.target.id === "lessonModal") closeLessonModal();
+});
+document.getElementById("taskModal").addEventListener("click", e => {
+  if(e.target.id === "taskModal") closeTaskModal();
+});
+
+loadState();
+document.getElementById("reportDate").value = todayISO();
+renderAll();
+
+// PWA: instalação e funcionamento offline
+let deferredInstallPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  const btn = document.getElementById("installBtn");
+  if(btn) btn.style.display = "inline-flex";
+});
+
+async function installPWA(){
+  if(!deferredInstallPrompt){
+    alert("Se o botão de instalação não aparecer, use o menu do navegador e escolha 'Adicionar à tela inicial' ou 'Instalar app'.");
+    return;
+  }
+  deferredInstallPrompt.prompt();
+  await deferredInstallPrompt.userChoice;
+  deferredInstallPrompt = null;
+  const btn = document.getElementById("installBtn");
+  if(btn) btn.style.display = "none";
+}
+
+window.addEventListener("appinstalled", () => {
+  const btn = document.getElementById("installBtn");
+  if(btn) btn.style.display = "none";
+  toast("App instalado com sucesso.");
+});
+
+if("serviceWorker" in navigator){
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./sw.js").catch(() => {
+      console.log("Service Worker não pôde ser registrado.");
+    });
+  });
+}
+
+</script>
+</body>
+</html>

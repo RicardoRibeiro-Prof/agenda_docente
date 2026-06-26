@@ -1,0 +1,24 @@
+# Agenda Docente — versão App/PWA
+
+Esta versão pode ser instalada no celular ou computador como aplicativo.
+
+## Como testar no computador
+1. Abra `index.html` no navegador.
+2. Para instalar como app, o ideal é hospedar a pasta em um servidor HTTPS, como GitHub Pages, Netlify ou Vercel.
+3. Depois de hospedado, abra o link no Chrome/Edge e clique em "Instalar app".
+
+## Como instalar no Android
+1. Publique os arquivos em GitHub Pages, Netlify ou Vercel.
+2. Abra o link no Chrome do celular.
+3. Toque nos três pontinhos.
+4. Escolha "Adicionar à tela inicial" ou "Instalar app".
+
+## Como instalar no iPhone
+1. Publique os arquivos em GitHub Pages, Netlify ou Vercel.
+2. Abra o link no Safari.
+3. Toque em compartilhar.
+4. Escolha "Adicionar à Tela de Início".
+
+## Importante
+Os dados continuam salvos no aparelho/navegador usando localStorage.
+Use o backup JSON dentro do app para evitar perda de dados.
