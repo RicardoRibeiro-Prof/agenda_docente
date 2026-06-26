@@ -1,19 +1,15 @@
-# Agenda Docente — versão com login
+# Agenda Docente — login corrigido
 
-Alterações desta versão:
-- Removidos os botões flutuantes '+ Aula' e '+ Atividade' da lateral inferior.
-- Adicionada tela de login local do professor.
-- No primeiro acesso, o professor cria nome e senha.
-- Depois, o app solicita login antes de abrir a agenda.
-- Adicionado botão 'Sair' no topo.
-- Continua funcionando como PWA instalável.
+Correções desta versão:
+- A tela de primeiro acesso agora mostra os campos de nome, senha e confirmação.
+- A função de login agora é inicializada ao carregar a página.
+- Atualizado cache do PWA para v4 para evitar versão antiga presa no navegador.
+- Mantidos os botões flutuantes removidos.
 
-## Importante
-Este login é local, salvo no próprio navegador/aparelho.
-Não é login online e não sincroniza em nuvem.
+## Atenção ao atualizar no GitHub Pages
+Como o app usa PWA/offline, o navegador pode manter a versão antiga em cache.
 
-## Como usar
-1. Abra `index.html`.
-2. No primeiro acesso, crie nome e senha.
-3. Use normalmente.
-4. Para instalar no celular, hospede em GitHub Pages, Netlify ou Vercel e use "Adicionar à tela inicial".
+Depois de subir os arquivos:
+1. Pressione Ctrl + F5 no computador.
+2. Se ainda aparecer antigo, limpe os dados do site.
+3. No Chrome: cadeado/ícone ao lado do endereço > Configurações do site > Limpar dados.

@@ -490,11 +490,11 @@
     <div class="login-card">
       <div class="login-logo">📚</div>
       <h1>Agenda Docente</h1>
-      <p id="loginSubtitle">Acesse sua agenda pessoal de aulas e atividades.</p>
+      <p id="loginSubtitle">Crie seu acesso ou entre para usar sua agenda pessoal de aulas e atividades.</p>
 
       <div id="loginError" class="login-error"></div>
 
-      <form id="setupForm" onsubmit="createLocalAccount(event)" style="display:none">
+      <form id="setupForm" onsubmit="createLocalAccount(event)" style="display:grid">
         <label>Nome do professor
           <input id="setupName" autocomplete="name" placeholder="Ex.: Ricardo" required />
         </label>
@@ -1715,10 +1715,21 @@ const LOGIN_KEY = "agenda_docente_login_v1";
 const SESSION_KEY = "agenda_docente_session_v1";
 
 async function sha256(text){
-  const encoder = new TextEncoder();
-  const data = encoder.encode(text);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+  if(window.crypto && crypto.subtle && window.TextEncoder){
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hash = await crypto.subtle.digest("SHA-256", data);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,"0")).join("");
+  }
+
+  // Fallback simples para ambientes locais sem crypto.subtle.
+  // Para este app local, isso evita que o login pare de funcionar ao abrir por arquivo.
+  let hash = 0;
+  for(let i = 0; i < text.length; i++){
+    hash = ((hash << 5) - hash) + text.charCodeAt(i);
+    hash |= 0;
+  }
+  return "fallback-" + Math.abs(hash).toString(16);
 }
 
 function getLocalAccount(){
@@ -1850,6 +1861,7 @@ function initLogin(){
 loadState();
 document.getElementById("reportDate").value = todayISO();
 renderAll();
+initLogin();
 
 // PWA: instalação e funcionamento offline
 let deferredInstallPrompt = null;
