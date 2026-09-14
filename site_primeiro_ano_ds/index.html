@@ -3,69 +3,246 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#070b12">
-  <meta name="description" content="Portal do 1º Ano de Desenvolvimento de Sistemas">
-  <title>1º Ano — Desenvolvimento de Sistemas</title>
-  <link rel="preconnect" href="https://images.unsplash.com">
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="Site oficial do 1º Ano de Desenvolvimento de Sistemas — Turma 2026">
+  <meta name="theme-color" content="#071a33">
+  <title>1º Ano DS | Turma 2026</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:Arial,Helvetica,sans-serif;background:#f4f7fb;color:#17243a;line-height:1.6}
+    img{display:block;width:100%}
+    a{text-decoration:none;color:inherit}
+    .container{width:min(1120px,calc(100% - 32px));margin:auto}
+
+    header{position:sticky;top:0;z-index:20;background:rgba(7,26,51,.97);border-bottom:1px solid rgba(255,255,255,.1)}
+    .nav{height:70px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .logo{display:flex;align-items:center;gap:10px;color:#fff;font-size:18px;font-weight:800;white-space:nowrap}
+    .logo-badge{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:#1ca7ff;color:#fff}
+    nav{display:flex;gap:5px}
+    nav a{padding:9px 12px;border-radius:9px;color:#d8e5f5;font-size:14px;font-weight:700}
+    nav a:hover{background:rgba(255,255,255,.1);color:#fff}
+
+    .hero{background:#071a33;color:#fff;padding:72px 0;overflow:hidden}
+    .hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:54px}
+    .eyebrow{display:inline-block;margin-bottom:16px;padding:7px 11px;border-radius:999px;background:rgba(28,167,255,.14);border:1px solid rgba(82,195,255,.28);color:#74d2ff;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    h1{max-width:620px;font-size:clamp(42px,6vw,70px);line-height:1;letter-spacing:-.04em}
+    h1 span{color:#37b9ff}
+    .hero p{max-width:590px;margin-top:20px;color:#b7c8dc;font-size:17px}
+    .hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 20px;border-radius:11px;font-weight:800}
+    .btn-primary{background:#1ca7ff;color:#031426}
+    .btn-secondary{border:1px solid rgba(255,255,255,.22);color:#fff}
+    .hero-photo{position:relative}
+    .hero-photo img{height:500px;object-fit:cover;border-radius:28px;box-shadow:0 30px 70px rgba(0,0,0,.38)}
+    .photo-label{position:absolute;left:18px;right:18px;bottom:18px;padding:15px 18px;border-radius:14px;background:rgba(3,16,32,.82);backdrop-filter:blur(8px)}
+    .photo-label small{display:block;color:#55c8ff;text-transform:uppercase;font-weight:800;letter-spacing:.08em}
+    .photo-label strong{font-size:18px}
+
+    section{padding:78px 0}
+    .section-head{max-width:720px;margin-bottom:34px}
+    .section-head.center{text-align:center;margin-left:auto;margin-right:auto}
+    .section-head span{color:#087fc7;font-size:12px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+    h2{margin-top:6px;font-size:clamp(32px,4.5vw,50px);line-height:1.08;letter-spacing:-.035em;color:#102039}
+    .section-head p{margin-top:12px;color:#637188}
+    .about{background:#fff}
+    .about-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .about-card{padding:26px;border:1px solid #dce6f0;border-radius:18px;background:#fff;box-shadow:0 12px 35px rgba(34,68,105,.07)}
+    .about-card b{width:48px;height:48px;display:grid;place-items:center;margin-bottom:18px;border-radius:13px;background:#e9f6ff;color:#0789d6;font-size:20px}
+    .about-card h3{margin-bottom:7px;font-size:20px}
+    .about-card p{color:#67758a;font-size:14px}
+
+    .subjects{background:#edf4fa}
+    .subject-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+    .subject{display:flex;align-items:center;gap:14px;padding:20px;border-radius:15px;background:#fff;border:1px solid #dbe6ef;font-weight:800}
+    .subject i{width:42px;height:42px;display:grid;place-items:center;flex:none;border-radius:11px;background:#0c2646;color:#55c8ff;font-style:normal}
+
+    .projects{background:#071a33;color:#fff}
+    .projects .section-head span{color:#5dcbff}
+    .projects .section-head h2{color:#fff}
+    .projects .section-head p{color:#aabed4}
+    .project-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .project-card{overflow:hidden;border-radius:20px;background:#0d294b;border:1px solid rgba(112,196,255,.18)}
+    .project-card img{height:220px;object-fit:cover}
+    .project-content{padding:22px}
+    .tag{display:inline-block;margin-bottom:11px;padding:6px 9px;border-radius:999px;background:#1ca7ff;color:#031426;font-size:10px;font-weight:900;text-transform:uppercase}
+    .project-card h3{font-size:21px}
+    .project-card p{margin-top:7px;color:#b4c5d8;font-size:14px}
+
+    .gallery{background:#fff}
+    .gallery-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;grid-template-rows:240px 240px;gap:14px}
+    .gallery-grid figure{position:relative;overflow:hidden;border-radius:17px;background:#d9e5ef}
+    .gallery-grid figure:first-child{grid-row:1/3}
+    .gallery-grid img{height:100%;object-fit:cover;transition:transform .35s}
+    .gallery-grid figure:hover img{transform:scale(1.04)}
+    .gallery-grid figcaption{position:absolute;left:13px;bottom:13px;padding:7px 10px;border-radius:8px;background:rgba(5,20,38,.78);color:#fff;font-size:12px;font-weight:800}
+
+    .message{background:#edf4fa}
+    .message-box{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:38px;padding:34px;border-radius:25px;background:#fff;border:1px solid #dce6ef}
+    .message-box img{height:340px;object-fit:cover;border-radius:18px}
+    .message-box h2{margin-bottom:13px}
+    .message-box p{color:#637188}
+    .pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+    .pills span{padding:7px 10px;border-radius:999px;background:#e8f5ff;color:#087abb;font-size:12px;font-weight:800}
+
+    footer{padding:34px 0;background:#041225;color:#97abc1;text-align:center}
+    footer strong{display:block;color:#fff;margin-bottom:4px}
+
+    @media(max-width:860px){
+      nav{overflow-x:auto;max-width:65vw}
+      nav a{white-space:nowrap}
+      .hero-grid,.message-box{grid-template-columns:1fr}
+      .hero{text-align:center;padding-top:52px}
+      .hero p{margin-left:auto;margin-right:auto}
+      .hero-actions{justify-content:center}
+      .hero-photo{max-width:650px;margin:auto}
+      .hero-photo img{height:420px}
+      .about-grid,.subject-grid{grid-template-columns:1fr}
+      .project-grid{grid-template-columns:1fr 1fr}
+      .gallery-grid{grid-template-columns:1fr 1fr;grid-template-rows:300px 220px 220px}
+      .gallery-grid figure:first-child{grid-column:1/3;grid-row:auto}
+    }
+    @media(max-width:560px){
+      .container{width:min(100% - 22px,1120px)}
+      .nav{height:62px}
+      .logo span{display:none}
+      .logo-badge{width:39px;height:39px}
+      nav{max-width:calc(100vw - 72px)}
+      nav a{padding:8px 9px;font-size:12px}
+      .hero{padding:42px 0 50px}
+      h1{font-size:44px}
+      .hero p{font-size:15px}
+      .hero-photo img{height:340px;border-radius:19px}
+      section{padding:58px 0}
+      .project-grid{grid-template-columns:1fr}
+      .gallery-grid{display:grid;grid-template-columns:1fr;grid-template-rows:repeat(4,230px)}
+      .gallery-grid figure:first-child{grid-column:auto}
+      .message-box{padding:20px}
+      .message-box img{height:250px}
+    }
+  </style>
 </head>
 <body>
-  <header class="topo">
-    <div class="container topo-conteudo">
-      <a href="#inicio" class="marca"><img src="assets/images/logo-turma.svg" alt="Logo da turma" class="mini-logo"><span>1º Ano DS</span></a>
-      <nav class="menu"><a href="#inicio">Início</a><a href="#turma">Turma</a><a href="#projetos">Projetos</a><a href="#galeria">Galeria</a><a href="#eventos">Eventos</a></nav>
+  <header>
+    <div class="container nav">
+      <a class="logo" href="#inicio"><span class="logo-badge">DS</span><span>1º Ano • Turma 2026</span></a>
+      <nav aria-label="Menu principal">
+        <a href="#inicio">Início</a>
+        <a href="#turma">Turma</a>
+        <a href="#disciplinas">Disciplinas</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#galeria">Galeria</a>
+      </nav>
     </div>
   </header>
+
   <main>
-    <section id="inicio" class="hero"><div class="container hero-conteudo">
-      <div class="brasao-container"><img src="assets/images/logo-turma.svg" alt="Brasão do 1º Ano de Desenvolvimento de Sistemas" class="brasao"></div>
-      <span class="etiqueta">Turma 2026 • Desenvolvimento de Sistemas</span>
-      <h1>Primeiro Ano<span>Desenvolvimento de Sistemas</span></h1>
-      <p class="hero-texto">Tecnologia, criatividade e união em uma só turma. Nosso espaço para projetos, atividades, eventos e tudo que estamos construindo durante o ano.</p>
-      <div class="acoes">
-        <button class="acao" data-scroll="turma"><span class="acao-circulo">DS</span><span>Nossa turma</span></button>
-        <button class="acao" id="btnCompartilhar"><span class="acao-circulo">↗</span><span>Compartilhar</span></button>
-        <button class="acao" id="btnCopiar"><span class="acao-circulo">🔗</span><span>Copiar link</span></button>
-        <button class="acao" id="btnQr"><span class="acao-circulo">QR</span><span>QR code</span></button>
+    <section class="hero" id="inicio">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Desenvolvimento de Sistemas • 2026</span>
+          <h1>Aprender, criar e <span>transformar.</span></h1>
+          <p>Este é o espaço do 1º Ano de Desenvolvimento de Sistemas. Aqui compartilhamos projetos, conhecimentos e experiências construídas pela turma.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projetos">Ver nossos projetos</a>
+            <a class="btn btn-secondary" href="#turma">Conhecer a turma</a>
+          </div>
+        </div>
+        <div class="hero-photo">
+          <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1200&q=85" alt="Jovens estudando e desenvolvendo um projeto juntos">
+          <div class="photo-label"><small>1º Ano DS</small><strong>Construindo o futuro juntos</strong></div>
+        </div>
       </div>
-    </div></section>
+    </section>
 
-    <section id="turma" class="secao"><div class="container">
-      <div class="cabecalho-secao"><span class="subtitulo-secao">Nossa identidade</span><h2>Uma turma que aprende construindo.</h2><p>Aqui a tecnologia sai da teoria e vira projeto. Cada atividade é uma oportunidade para testar ideias, trabalhar em equipe e resolver problemas reais.</p></div>
-      <div class="grade grade-3">
-        <article class="card"><div class="numero-card">01</div><h3>Criatividade</h3><p>Ideias que viram telas, jogos, sistemas, protótipos e soluções digitais.</p></article>
-        <article class="card"><div class="numero-card">02</div><h3>Tecnologia</h3><p>Programação, banco de dados, redes, design e ferramentas usadas no mercado.</p></article>
-        <article class="card"><div class="numero-card">03</div><h3>Trabalho em equipe</h3><p>Projetos colaborativos para desenvolver organização, comunicação e responsabilidade.</p></article>
+    <section class="about" id="turma">
+      <div class="container">
+        <div class="section-head center">
+          <span>Nossa turma</span>
+          <h2>Muito além da sala de aula</h2>
+          <p>Aprendemos por meio da prática, da colaboração e da criação de soluções digitais.</p>
+        </div>
+        <div class="about-grid">
+          <article class="about-card"><b>01</b><h3>Criatividade</h3><p>Transformamos ideias em interfaces, jogos, sites e projetos digitais.</p></article>
+          <article class="about-card"><b>02</b><h3>Tecnologia</h3><p>Conhecemos ferramentas e conceitos importantes para o mercado de trabalho.</p></article>
+          <article class="about-card"><b>03</b><h3>Colaboração</h3><p>Desenvolvemos comunicação, organização e responsabilidade trabalhando em equipe.</p></article>
+        </div>
       </div>
-    </div></section>
+    </section>
 
-    <section id="projetos" class="secao"><div class="container">
-      <div class="cabecalho-secao"><span class="subtitulo-secao">Projetos</span><h2>O que estamos criando.</h2><p>Projetos e atividades desenvolvidos pela turma ao longo do ano.</p></div>
-      <div class="grade grade-2">
-        <article class="card card-projeto"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=1000&q=80" alt="Aplicativo em um celular" class="imagem-projeto" loading="lazy"><div class="conteudo-projeto"><span class="tag">Programação</span><h3>Aplicativo Escolar</h3><p>Protótipo de aplicativo para facilitar a rotina e a comunicação dos estudantes.</p></div></article>
-        <article class="card card-projeto"><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=80" alt="Desenvolvimento de site em notebook" class="imagem-projeto" loading="lazy"><div class="conteudo-projeto"><span class="tag">Web</span><h3>Site de Jogos</h3><p>Projeto visual com HTML, CSS e fundamentos de experiência do usuário.</p></div></article>
-        <article class="card card-projeto"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1000&q=80" alt="Servidores de banco de dados" class="imagem-projeto" loading="lazy"><div class="conteudo-projeto"><span class="tag">Banco de Dados</span><h3>Sistema de Cadastro</h3><p>Modelagem, CRUD e organização das informações em banco de dados.</p></div></article>
-        <article class="card card-projeto"><img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=80" alt="Videogame retrô representando Pixel Art" class="imagem-projeto" loading="lazy"><div class="conteudo-projeto"><span class="tag">Design</span><h3>Pixel Art</h3><p>Criação de personagens, cenários e identidade visual em baixa resolução.</p></div></article>
+    <section class="subjects" id="disciplinas">
+      <div class="container">
+        <div class="section-head">
+          <span>O que estudamos</span>
+          <h2>Conhecimento que vira projeto</h2>
+          <p>Áreas que fazem parte da formação da turma.</p>
+        </div>
+        <div class="subject-grid">
+          <div class="subject"><i>&lt;/&gt;</i> Lógica de Programação</div>
+          <div class="subject"><i>DB</i> Banco de Dados</div>
+          <div class="subject"><i>UI</i> Design de Interfaces</div>
+          <div class="subject"><i>WEB</i> Desenvolvimento Web</div>
+          <div class="subject"><i>🎮</i> Game Design</div>
+          <div class="subject"><i>NET</i> Redes e Sistemas</div>
+        </div>
       </div>
-    </div></section>
+    </section>
 
-    <section id="galeria" class="secao"><div class="container">
-      <div class="cabecalho-secao"><span class="subtitulo-secao">Galeria</span><h2>Momentos e atividades.</h2><p>Imagens que representam os trabalhos e as experiências da turma. Depois, elas podem ser substituídas pelas fotos reais dos alunos.</p></div>
-      <div class="galeria">
-        <figure class="foto-grande"><img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=82" alt="Estudantes trabalhando em equipe" loading="lazy"></figure>
-        <figure><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=82" alt="Programação em computador" loading="lazy"></figure>
-        <figure><img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=82" alt="Estudantes reunidos" loading="lazy"></figure>
+    <section class="projects" id="projetos">
+      <div class="container">
+        <div class="section-head">
+          <span>Projetos</span>
+          <h2>Ideias em desenvolvimento</h2>
+          <p>Algumas áreas práticas exploradas pelos estudantes ao longo do ano.</p>
+        </div>
+        <div class="project-grid">
+          <article class="project-card">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=82" alt="Código de programação exibido em notebook" loading="lazy">
+            <div class="project-content"><span class="tag">Desenvolvimento Web</span><h3>Sites responsivos</h3><p>Criação de páginas com HTML, CSS e JavaScript adaptadas para computador e celular.</p></div>
+          </article>
+          <article class="project-card">
+            <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=900&q=82" alt="Equipamentos de armazenamento de dados" loading="lazy">
+            <div class="project-content"><span class="tag">Banco de Dados</span><h3>Sistemas de cadastro</h3><p>Organização de dados, tabelas, relacionamentos e operações de cadastro.</p></div>
+          </article>
+          <article class="project-card">
+            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=900&q=82" alt="Videogame retrô e controle" loading="lazy">
+            <div class="project-content"><span class="tag">Game Design</span><h3>Jogos e Pixel Art</h3><p>Planejamento de jogos, criação de personagens, cenários e experiências interativas.</p></div>
+          </article>
+        </div>
       </div>
-    </div></section>
+    </section>
 
-    <section id="eventos" class="secao"><div class="container"><div class="destaque-evento">
-      <div class="evento-texto"><span class="subtitulo-secao">Eventos da turma</span><h2>É São João, é Copa e é código.</h2><p>O espírito da turma mistura tecnologia com os momentos marcantes do ano. Esta área pode receber calendário, fotos, avisos, desafios e resultados de atividades.</p><div class="chips"><span>São João</span><span>Projetos</span><span>Competições</span><span>Feiras</span><span>Aulas práticas</span></div></div>
-      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1100&q=82" alt="Equipe em ambiente de tecnologia" class="imagem-evento" loading="lazy">
-    </div></div></section>
+    <section class="gallery" id="galeria">
+      <div class="container">
+        <div class="section-head center">
+          <span>Galeria</span>
+          <h2>Aprendizado na prática</h2>
+          <p>Imagens representativas que poderão ser substituídas pelas fotos reais da turma.</p>
+        </div>
+        <div class="gallery-grid">
+          <figure><img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1200&q=82" alt="Estudantes colaborando em uma atividade" loading="lazy"><figcaption>Trabalho em equipe</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=82" alt="Pessoa estudando tecnologia em notebook" loading="lazy"><figcaption>Programação</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=82" alt="Grupo de estudantes" loading="lazy"><figcaption>União da turma</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=800&q=82" alt="Notebook em uma mesa de estudos" loading="lazy"><figcaption>Tecnologia</figcaption></figure>
+          <figure><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=800&q=82" alt="Aplicativo exibido em celular" loading="lazy"><figcaption>Criação de aplicativos</figcaption></figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="message">
+      <div class="container message-box">
+        <div>
+          <span class="eyebrow">Turma 2026</span>
+          <h2>O primeiro passo de uma grande jornada</h2>
+          <p>Cada aula, desafio e projeto ajuda a construir conhecimentos que acompanharão os estudantes durante toda a formação profissional.</p>
+          <div class="pills"><span>Curiosidade</span><span>Conhecimento</span><span>Responsabilidade</span><span>Inovação</span></div>
+        </div>
+        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=1000&q=82" alt="Equipe reunida em ambiente de tecnologia" loading="lazy">
+      </div>
+    </section>
   </main>
-  <footer class="rodape"><div class="container">1º Ano — Desenvolvimento de Sistemas • 2026</div></footer>
-  <div class="modal" id="modalQr"><div class="modal-caixa"><h3>QR Code da página</h3><p>Escaneie para abrir este site no celular.</p><div class="qr-area"><img id="qrImagem" alt="QR Code da página"></div><button id="btnFecharQr" class="botao-fechar">Fechar</button></div></div>
-  <div class="toast" id="toast"></div>
-  <script src="js/script.js"></script>
+
+  <footer>
+    <div class="container"><strong>1º Ano — Desenvolvimento de Sistemas</strong><span>Turma 2026 • Aprendendo hoje para criar o amanhã.</span></div>
+  </footer>
 </body>
 </html>
