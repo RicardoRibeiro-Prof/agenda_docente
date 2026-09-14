@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070b12">
+  <meta name="description" content="Portal do 1º Ano de Desenvolvimento de Sistemas">
+  <title>1º Ano — Desenvolvimento de Sistemas</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="container topo-conteudo">
+      <a href="#inicio" class="marca"><img src="assets/images/logo-turma.svg" alt="Logo da turma" class="mini-logo"><span>1º Ano DS</span></a>
+      <nav class="menu"><a href="#inicio">Início</a><a href="#turma">Turma</a><a href="#projetos">Projetos</a><a href="#galeria">Galeria</a><a href="#eventos">Eventos</a></nav>
+    </div>
+  </header>
+  <main>
+    <section id="inicio" class="hero"><div class="container hero-conteudo">
+      <div class="brasao-container"><img src="assets/images/logo-turma.svg" alt="Brasão do 1º Ano de Desenvolvimento de Sistemas" class="brasao"></div>
+      <span class="etiqueta">Turma 2026 • Desenvolvimento de Sistemas</span>
+      <h1>Primeiro Ano<span>Desenvolvimento de Sistemas</span></h1>
+      <p class="hero-texto">Tecnologia, criatividade e união em uma só turma. Nosso espaço para projetos, atividades, eventos e tudo que estamos construindo durante o ano.</p>
+      <div class="acoes">
+        <button class="acao" data-scroll="turma"><span class="acao-circulo">DS</span><span>Nossa turma</span></button>
+        <button class="acao" id="btnCompartilhar"><span class="acao-circulo">↗</span><span>Compartilhar</span></button>
+        <button class="acao" id="btnCopiar"><span class="acao-circulo">🔗</span><span>Copiar link</span></button>
+        <button class="acao" id="btnQr"><span class="acao-circulo">QR</span><span>QR code</span></button>
+      </div>
+    </div></section>
+
+    <section id="turma" class="secao"><div class="container">
+      <div class="cabecalho-secao"><span class="subtitulo-secao">Nossa identidade</span><h2>Uma turma que aprende construindo.</h2><p>Aqui a tecnologia sai da teoria e vira projeto. Cada atividade é uma oportunidade para testar ideias, trabalhar em equipe e resolver problemas reais.</p></div>
+      <div class="grade grade-3">
+        <article class="card"><div class="numero-card">01</div><h3>Criatividade</h3><p>Ideias que viram telas, jogos, sistemas, protótipos e soluções digitais.</p></article>
+        <article class="card"><div class="numero-card">02</div><h3>Tecnologia</h3><p>Programação, banco de dados, redes, design e ferramentas usadas no mercado.</p></article>
+        <article class="card"><div class="numero-card">03</div><h3>Trabalho em equipe</h3><p>Projetos colaborativos para desenvolver organização, comunicação e responsabilidade.</p></article>
+      </div>
+    </div></section>
+
+    <section id="projetos" class="secao"><div class="container">
+      <div class="cabecalho-secao"><span class="subtitulo-secao">Projetos</span><h2>O que estamos criando.</h2><p>Projetos e atividades desenvolvidos pela turma ao longo do ano.</p></div>
+      <div class="grade grade-2">
+        <article class="card card-projeto"><img src="assets/images/projeto-app-realista.svg" alt="Ilustração de aplicativo escolar" class="imagem-projeto"><div class="conteudo-projeto"><span class="tag">Programação</span><h3>Aplicativo Escolar</h3><p>Protótipo de aplicativo para facilitar a rotina e a comunicação dos estudantes.</p></div></article>
+        <article class="card card-projeto"><img src="assets/images/projeto-web-realista.svg" alt="Ilustração de site" class="imagem-projeto"><div class="conteudo-projeto"><span class="tag">Web</span><h3>Site de Jogos</h3><p>Projeto visual com HTML, CSS e fundamentos de experiência do usuário.</p></div></article>
+        <article class="card card-projeto"><img src="assets/images/projeto-banco-realista.svg" alt="Ilustração de banco de dados" class="imagem-projeto"><div class="conteudo-projeto"><span class="tag">Banco de Dados</span><h3>Sistema de Cadastro</h3><p>Modelagem, CRUD e organização das informações em banco de dados.</p></div></article>
+        <article class="card card-projeto"><img src="assets/images/projeto-pixel-realista.svg" alt="Ilustração de pixel art" class="imagem-projeto"><div class="conteudo-projeto"><span class="tag">Design</span><h3>Pixel Art</h3><p>Criação de personagens, cenários e identidade visual em baixa resolução.</p></div></article>
+      </div>
+    </div></section>
+
+    <section id="galeria" class="secao"><div class="container">
+      <div class="cabecalho-secao"><span class="subtitulo-secao">Galeria</span><h2>Momentos e atividades.</h2><p>Registros visuais dos trabalhos e experiências da turma.</p></div>
+      <div class="galeria"><figure class="foto-grande"><img src="assets/images/galeria-1-realista.svg" alt="Trabalho em equipe"></figure><figure><img src="assets/images/galeria-2-realista.svg" alt="Programação"></figure><figure><img src="assets/images/galeria-3-realista.svg" alt="Projeto integrador"></figure></div>
+    </div></section>
+
+    <section id="eventos" class="secao"><div class="container"><div class="destaque-evento">
+      <div class="evento-texto"><span class="subtitulo-secao">Eventos da turma</span><h2>É São João, é Copa e é código.</h2><p>O espírito da turma mistura tecnologia com os momentos marcantes do ano. Esta área pode receber calendário, fotos, avisos, desafios e resultados de atividades.</p><div class="chips"><span>São João</span><span>Projetos</span><span>Competições</span><span>Feiras</span><span>Aulas práticas</span></div></div>
+      <img src="assets/images/evento-sao-joao-realista.svg" alt="São João e tecnologia" class="imagem-evento">
+    </div></div></section>
+  </main>
+  <footer class="rodape"><div class="container">1º Ano — Desenvolvimento de Sistemas • 2026</div></footer>
+  <div class="modal" id="modalQr"><div class="modal-caixa"><h3>QR Code da página</h3><p>Escaneie para abrir este site no celular.</p><div class="qr-area"><img id="qrImagem" alt="QR Code da página"></div><button id="btnFecharQr" class="botao-fechar">Fechar</button></div></div>
+  <div class="toast" id="toast"></div>
+  <script src="js/script.js"></script>
+</body>
+</html>
